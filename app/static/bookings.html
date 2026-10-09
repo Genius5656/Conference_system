@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мои заявки — Конференции.РФ</title>
+  <meta name="description" content="Личный кабинет портала «Конференции.РФ»: заявки на бронирование помещений, статусы и отзывы о проведённых мероприятиях.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="/assets/js/api.js" defer></script>
+  <script src="/assets/js/ui.js" defer></script>
+  <script src="/assets/js/pages/bookings.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header__inner">
+      <a class="logo" href="/index.html">
+        <span class="logo__badge">КРФ</span>
+        <span class="logo__text">Конференции<span class="logo__accent">.РФ</span></span>
+      </a>
+
+      <nav class="nav" id="main-nav" aria-label="Основная навигация">
+        <a class="nav__link" href="/index.html">Главная</a>
+        <a class="nav__link" href="/bookings.html" data-auth="user" hidden>Мои заявки</a>
+        <a class="nav__link" href="/booking-new.html" data-auth="user" hidden>Новая заявка</a>
+        <a class="nav__link" href="/admin.html" data-auth="admin" hidden>Панель администратора</a>
+
+        <div class="nav__actions">
+          <a class="btn btn--ghost btn--sm" href="/login.html" data-auth="guest" hidden>Войти</a>
+          <a class="btn btn--primary btn--sm" href="/register.html" data-auth="guest" hidden>Регистрация</a>
+          <span class="nav__user" id="nav-user" data-auth="user" hidden></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-action="logout" data-auth="user" hidden>Выйти</button>
+        </div>
+      </nav>
+
+      <button class="burger" id="burger-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <div class="page-head">
+          <div>
+            <h1>Личный кабинет</h1>
+            <p>Заявки на бронирование помещений и отзывы о проведённых мероприятиях.</p>
+          </div>
+          <a class="btn btn--primary" href="/booking-new.html">Создать заявку</a>
+        </div>
+
+        <div class="profile-grid">
+          <div class="card">
+            <div class="card__header">
+              <h2 style="margin: 0">Мои данные</h2>
+              <span class="badge badge--neutral" id="profile-role">—</span>
+            </div>
+            <div class="card__body">
+              <dl class="profile-list" id="profile-list">
+                <div>
+                  <dt>ФИО</dt>
+                  <dd id="profile-name">—</dd>
+                </div>
+                <div>
+                  <dt>Логин</dt>
+                  <dd id="profile-login">—</dd>
+                </div>
+                <div>
+                  <dt>Номер телефона</dt>
+                  <dd id="profile-phone">—</dd>
+                </div>
+                <div>
+                  <dt>Электронная почта</dt>
+                  <dd id="profile-email">—</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card__header">
+              <h2 style="margin: 0">Сводка</h2>
+            </div>
+            <div class="card__body">
+              <div class="chips" id="summary-chips">
+                <span class="chip">Загрузка…</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section__head">
+          <h2>Мои заявки</h2>
+          <p>Отзыв можно оставить только после завершения мероприятия.</p>
+        </div>
+
+        <div class="bookings-list" id="bookings-list" aria-live="polite">
+          <div class="loading-note"><span class="spinner" aria-hidden="true"></span> Загрузка заявок…</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__grid">
+      <div>
+        <h3>Портал «Конференции.РФ»</h3>
+        <p>Информационная система бронирования помещений для проведения Всероссийских конференций: аудитории, коворкинги и кинозалы.</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <nav class="footer__links" aria-label="Навигация в подвале">
+          <a href="/index.html">Главная</a>
+          <a href="/login.html">Вход в систему</a>
+          <a href="/register.html">Регистрация</a>
+          <a href="/api/docs">Документация API</a>
+        </nav>
+      </div>
+      <div>
+        <h3>Мы в социальных сетях</h3>
+        <div class="footer__social">
+          <img src="/assets/img/social-networks.png" alt="Социальные сети: ВКонтакте и Одноклассники" width="240" height="160" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">© 2026 Портал «Конференции.РФ». Учебный проект.</div>
+    </div>
+  </footer>
+</body>
+</html>

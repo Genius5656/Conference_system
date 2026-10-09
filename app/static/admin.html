@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Панель администратора — Конференции.РФ</title>
+  <meta name="description" content="Панель администратора портала «Конференции.РФ»: все заявки пользователей, фильтрация и смена статусов.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="/assets/js/api.js" defer></script>
+  <script src="/assets/js/ui.js" defer></script>
+  <script src="/assets/js/pages/admin.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header__inner">
+      <a class="logo" href="/index.html">
+        <span class="logo__badge">КРФ</span>
+        <span class="logo__text">Конференции<span class="logo__accent">.РФ</span></span>
+      </a>
+
+      <nav class="nav" id="main-nav" aria-label="Основная навигация">
+        <a class="nav__link" href="/index.html">Главная</a>
+        <a class="nav__link" href="/bookings.html" data-auth="user" hidden>Мои заявки</a>
+        <a class="nav__link" href="/booking-new.html" data-auth="user" hidden>Новая заявка</a>
+        <a class="nav__link" href="/admin.html" data-auth="admin" hidden>Панель администратора</a>
+
+        <div class="nav__actions">
+          <a class="btn btn--ghost btn--sm" href="/login.html" data-auth="guest" hidden>Войти</a>
+          <a class="btn btn--primary btn--sm" href="/register.html" data-auth="guest" hidden>Регистрация</a>
+          <span class="nav__user" id="nav-user" data-auth="user" hidden></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-action="logout" data-auth="user" hidden>Выйти</button>
+        </div>
+      </nav>
+
+      <button class="burger" id="burger-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <div class="page-head">
+          <div>
+            <h1>Панель администратора</h1>
+            <p>Все заявки пользователей портала, фильтрация и управление статусами.</p>
+          </div>
+          <a class="btn btn--ghost" href="/index.html">← На главную</a>
+        </div>
+
+        <div class="stats" id="stats" aria-live="polite">
+          <div class="stat"><span class="stat__value" data-stat="total">—</span><span class="stat__label">Всего заявок</span></div>
+          <div class="stat"><span class="stat__value" data-stat="new">—</span><span class="stat__label">Новые</span></div>
+          <div class="stat stat--warning"><span class="stat__value" data-stat="assigned">—</span><span class="stat__label">Мероприятие назначено</span></div>
+          <div class="stat stat--success"><span class="stat__value" data-stat="completed">—</span><span class="stat__label">Завершено</span></div>
+          <div class="stat stat--muted"><span class="stat__value" data-stat="reviews">—</span><span class="stat__label">Отзывов</span></div>
+          <div class="stat stat--muted"><span class="stat__value" data-stat="users">—</span><span class="stat__label">Пользователей</span></div>
+        </div>
+
+        <form class="filters" id="filters-form" novalidate>
+          <div class="field" data-field="status">
+            <label class="field__label" for="f-status">Статус</label>
+            <select class="select" id="f-status" name="status">
+              <option value="all">Все статусы</option>
+              <option value="new">Новая</option>
+              <option value="assigned">Мероприятие назначено</option>
+              <option value="completed">Завершено</option>
+            </select>
+          </div>
+
+          <div class="field" data-field="login">
+            <label class="field__label" for="f-login">Логин заявителя</label>
+            <input class="input" type="text" id="f-login" name="login" placeholder="Часть логина" maxlength="32">
+          </div>
+
+          <div class="field" data-field="room">
+            <label class="field__label" for="f-room">Помещение</label>
+            <input class="input" type="text" id="f-room" name="room" placeholder="Часть названия" maxlength="120">
+          </div>
+
+          <div class="field" data-field="date_from">
+            <label class="field__label" for="f-date-from">Дата от</label>
+            <input class="input" type="date" id="f-date-from" name="date_from">
+          </div>
+
+          <div class="field" data-field="date_to">
+            <label class="field__label" for="f-date-to">Дата до</label>
+            <input class="input" type="date" id="f-date-to" name="date_to">
+          </div>
+
+          <div class="filters__actions">
+            <button class="btn btn--primary" type="submit">Применить</button>
+            <button class="btn btn--ghost" type="button" id="filters-reset">Сбросить</button>
+          </div>
+        </form>
+
+        <div class="form-alert" id="admin-alert" role="alert" style="margin-bottom: 18px"></div>
+
+        <div class="admin-list" id="admin-list" aria-live="polite">
+          <div class="loading-note" style="grid-column: 1 / -1">
+            <span class="spinner" aria-hidden="true"></span> Загрузка заявок…
+          </div>
+        </div>
+
+        <div class="pagination" id="pagination" hidden>
+          <button class="btn btn--ghost btn--sm" type="button" id="page-prev">← Назад</button>
+          <span class="pagination__info" id="page-info">Страница 1</span>
+          <button class="btn btn--ghost btn--sm" type="button" id="page-next">Вперёд →</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__grid">
+      <div>
+        <h3>Портал «Конференции.РФ»</h3>
+        <p>Информационная система бронирования помещений для проведения Всероссийских конференций: аудитории, коворкинги и кинозалы.</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <nav class="footer__links" aria-label="Навигация в подвале">
+          <a href="/index.html">Главная</a>
+          <a href="/login.html">Вход в систему</a>
+          <a href="/register.html">Регистрация</a>
+          <a href="/api/docs">Документация API</a>
+        </nav>
+      </div>
+      <div>
+        <h3>Мы в социальных сетях</h3>
+        <div class="footer__social">
+          <img src="/assets/img/social-networks.png" alt="Социальные сети: ВКонтакте и Одноклассники" width="240" height="160" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">© 2026 Портал «Конференции.РФ». Учебный проект.</div>
+    </div>
+  </footer>
+</body>
+</html>

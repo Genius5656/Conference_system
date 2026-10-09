@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Регистрация — Конференции.РФ</title>
+  <meta name="description" content="Регистрация на портале «Конференции.РФ»: логин, пароль, ФИО, телефон и электронная почта для подачи заявок на бронирование помещений.">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script src="/assets/js/api.js" defer></script>
+  <script src="/assets/js/ui.js" defer></script>
+  <script src="/assets/js/pages/register.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header__inner">
+      <a class="logo" href="/index.html">
+        <span class="logo__badge">КРФ</span>
+        <span class="logo__text">Конференции<span class="logo__accent">.РФ</span></span>
+      </a>
+
+      <nav class="nav" id="main-nav" aria-label="Основная навигация">
+        <a class="nav__link" href="/index.html">Главная</a>
+        <a class="nav__link" href="/bookings.html" data-auth="user" hidden>Мои заявки</a>
+        <a class="nav__link" href="/booking-new.html" data-auth="user" hidden>Новая заявка</a>
+        <a class="nav__link" href="/admin.html" data-auth="admin" hidden>Панель администратора</a>
+
+        <div class="nav__actions">
+          <a class="btn btn--ghost btn--sm" href="/login.html" data-auth="guest" hidden>Войти</a>
+          <a class="btn btn--primary btn--sm" href="/register.html" data-auth="guest" hidden>Регистрация</a>
+          <span class="nav__user" id="nav-user" data-auth="user" hidden></span>
+          <button class="btn btn--ghost btn--sm" type="button" data-action="logout" data-auth="user" hidden>Выйти</button>
+        </div>
+      </nav>
+
+      <button class="burger" id="burger-btn" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Открыть меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="auth-layout">
+      <div class="container">
+        <div class="card auth-card reveal">
+          <div class="card__body">
+            <div class="auth-card__head">
+              <h1>Регистрация</h1>
+              <p>Создайте учётную запись для подачи заявок на бронирование</p>
+            </div>
+
+            <form class="form" id="register-form" novalidate>
+              <div class="form-alert" id="register-alert" role="alert"></div>
+
+              <div class="field" data-field="login">
+                <label class="field__label" for="login">Логин<span class="required">*</span></label>
+                <input class="input" type="text" id="login" name="login"
+                       placeholder="Только латиница и цифры, минимум 6 символов"
+                       autocomplete="username" maxlength="32" required>
+                <p class="field__hint">Уникальный логин: только латинские буквы и цифры, не короче 6 символов.</p>
+                <p class="field__error" data-error-for="login"></p>
+              </div>
+
+              <div class="field" data-field="password">
+                <label class="field__label" for="password">Пароль<span class="required">*</span></label>
+                <div class="password-wrap">
+                  <input class="input" type="password" id="password" name="password"
+                         placeholder="От 8 до 72 символов" autocomplete="new-password" maxlength="72" required>
+                  <button class="password-toggle" type="button" data-toggle-password="password">Показать</button>
+                </div>
+                <p class="field__hint">Длина пароля — от 8 до 72 символов.</p>
+                <p class="field__error" data-error-for="password"></p>
+              </div>
+
+              <div class="field" data-field="full_name">
+                <label class="field__label" for="full_name">ФИО<span class="required">*</span></label>
+                <input class="input" type="text" id="full_name" name="full_name"
+                       placeholder="Иванов Иван Иванович" autocomplete="name" maxlength="128" required>
+                <p class="field__hint">Только символы кириллицы и пробелы.</p>
+                <p class="field__error" data-error-for="full_name"></p>
+              </div>
+
+              <div class="field" data-field="phone">
+                <label class="field__label" for="phone">Номер телефона<span class="required">*</span></label>
+                <input class="input" type="tel" id="phone" name="phone"
+                       placeholder="8(XXX)XXX-XX-XX" autocomplete="tel" inputmode="numeric" maxlength="18" required>
+                <p class="field__hint">Формат: 8(XXX)XXX-XX-XX</p>
+                <p class="field__error" data-error-for="phone"></p>
+              </div>
+
+              <div class="field" data-field="email">
+                <label class="field__label" for="email">Электронная почта<span class="required">*</span></label>
+                <input class="input" type="email" id="email" name="email"
+                       placeholder="name@example.ru" autocomplete="email" maxlength="128" required>
+                <p class="field__error" data-error-for="email"></p>
+              </div>
+
+              <button class="btn btn--primary btn--lg btn--block" type="submit" id="register-submit">Создать пользователя</button>
+
+              <p class="form-note">
+                Уже зарегистрированы?
+                <a href="/login.html">Вход в систему</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__grid">
+      <div>
+        <h3>Портал «Конференции.РФ»</h3>
+        <p>Информационная система бронирования помещений для проведения Всероссийских конференций: аудитории, коворкинги и кинозалы.</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <nav class="footer__links" aria-label="Навигация в подвале">
+          <a href="/index.html">Главная</a>
+          <a href="/login.html">Вход в систему</a>
+          <a href="/register.html">Регистрация</a>
+          <a href="/api/docs">Документация API</a>
+        </nav>
+      </div>
+      <div>
+        <h3>Мы в социальных сетях</h3>
+        <div class="footer__social">
+          <img src="/assets/img/social-networks.png" alt="Социальные сети: ВКонтакте и Одноклассники" width="240" height="160" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">© 2026 Портал «Конференции.РФ». Учебный проект.</div>
+    </div>
+  </footer>
+</body>
+</html>

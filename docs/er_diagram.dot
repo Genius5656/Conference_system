@@ -1,0 +1,74 @@
+digraph er_diagram {
+    // ER-диаграмма портала «Конференции.РФ» (PostgreSQL)
+    // Генерация: dot -Tsvg docs/er_diagram.dot -o docs/er_diagram.svg
+    rankdir=LR;
+    graph [fontname="PT Sans", fontsize=13, bgcolor="white", pad=0.4, nodesep=0.7, ranksep=1.1];
+    node [fontname="PT Sans", fontsize=12, shape=plaintext, margin=0];
+    edge [fontname="PT Sans", fontsize=11, color="#0d47a1", fontcolor="#0d47a1", penwidth=1.4];
+
+    users [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#ffffff">
+  <TR><TD BGCOLOR="#0d47a1"><FONT COLOR="#ffffff"><B>users</B> — Пользователи</FONT></TD></TR>
+  <TR><TD ALIGN="LEFT"><B>PK</B>  id &nbsp;SERIAL</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>UQ</B>  login &nbsp;VARCHAR(32)</TD></TR>
+  <TR><TD ALIGN="LEFT">     password_hash &nbsp;VARCHAR(128)</TD></TR>
+  <TR><TD ALIGN="LEFT">     full_name &nbsp;VARCHAR(128)</TD></TR>
+  <TR><TD ALIGN="LEFT">     phone &nbsp;VARCHAR(20)</TD></TR>
+  <TR><TD ALIGN="LEFT">     email &nbsp;VARCHAR(128)</TD></TR>
+  <TR><TD ALIGN="LEFT">     role &nbsp;user_role</TD></TR>
+  <TR><TD ALIGN="LEFT">     created_at &nbsp;TIMESTAMPTZ</TD></TR>
+</TABLE>>];
+
+    rooms [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#ffffff">
+  <TR><TD BGCOLOR="#0d47a1"><FONT COLOR="#ffffff"><B>rooms</B> — Помещения</FONT></TD></TR>
+  <TR><TD ALIGN="LEFT"><B>PK</B>  id &nbsp;SERIAL</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>UQ</B>  name &nbsp;VARCHAR(120)</TD></TR>
+  <TR><TD ALIGN="LEFT">     kind &nbsp;room_kind</TD></TR>
+  <TR><TD ALIGN="LEFT">     capacity &nbsp;INTEGER</TD></TR>
+  <TR><TD ALIGN="LEFT">     description &nbsp;TEXT</TD></TR>
+  <TR><TD ALIGN="LEFT">     image_url &nbsp;VARCHAR(255)</TD></TR>
+</TABLE>>];
+
+    bookings [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#ffffff">
+  <TR><TD BGCOLOR="#0d47a1"><FONT COLOR="#ffffff"><B>bookings</B> — Заявки</FONT></TD></TR>
+  <TR><TD ALIGN="LEFT"><B>PK</B>  id &nbsp;SERIAL</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>FK</B>  user_id &nbsp;→ users.id</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>FK</B>  room_id &nbsp;→ rooms.id (NULL)</TD></TR>
+  <TR><TD ALIGN="LEFT">     room_name &nbsp;VARCHAR(120)</TD></TR>
+  <TR><TD ALIGN="LEFT">     event_date &nbsp;DATE</TD></TR>
+  <TR><TD ALIGN="LEFT">     start_time &nbsp;TIME</TD></TR>
+  <TR><TD ALIGN="LEFT">     payment_method &nbsp;payment_method</TD></TR>
+  <TR><TD ALIGN="LEFT">     status &nbsp;booking_status</TD></TR>
+  <TR><TD ALIGN="LEFT">     created_at &nbsp;TIMESTAMPTZ</TD></TR>
+  <TR><TD ALIGN="LEFT">     updated_at &nbsp;TIMESTAMPTZ</TD></TR>
+  <TR><TD ALIGN="LEFT"><FONT COLOR="#6c757d">CHECK: room_id OR room_name</FONT></TD></TR>
+</TABLE>>];
+
+    reviews [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#ffffff">
+  <TR><TD BGCOLOR="#0d47a1"><FONT COLOR="#ffffff"><B>reviews</B> — Отзывы</FONT></TD></TR>
+  <TR><TD ALIGN="LEFT"><B>PK</B>  id &nbsp;SERIAL</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>FK/UQ</B>  booking_id &nbsp;→ bookings.id</TD></TR>
+  <TR><TD ALIGN="LEFT"><B>FK</B>  user_id &nbsp;→ users.id</TD></TR>
+  <TR><TD ALIGN="LEFT">     rating &nbsp;INTEGER (1–5)</TD></TR>
+  <TR><TD ALIGN="LEFT">     comment &nbsp;TEXT</TD></TR>
+  <TR><TD ALIGN="LEFT">     created_at &nbsp;TIMESTAMPTZ</TD></TR>
+  <TR><TD ALIGN="LEFT"><FONT COLOR="#6c757d">CHECK: 1 &lt;= rating &lt;= 5</FONT></TD></TR>
+</TABLE>>];
+
+    enums_node [label=<
+<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="6" BGCOLOR="#f8f9fa">
+  <TR><TD BGCOLOR="#007bff"><FONT COLOR="#ffffff"><B>Перечисления (ENUM)</B></FONT></TD></TR>
+  <TR><TD ALIGN="LEFT">user_role: user, admin</TD></TR>
+  <TR><TD ALIGN="LEFT">room_kind: auditorium, coworking, cinema</TD></TR>
+  <TR><TD ALIGN="LEFT">payment_method: onsite, sbp</TD></TR>
+  <TR><TD ALIGN="LEFT">booking_status: new, assigned, completed</TD></TR>
+</TABLE>>];
+
+    users  -> bookings [label="1 : N  (заявитель)", arrowhead=normal, arrowtail=none];
+    rooms  -> bookings [label="1 : N  (бронируется)", arrowhead=normal, arrowtail=none];
+    bookings -> reviews [label="1 : 1  (отзыв)", arrowhead=normal, arrowtail=none];
+    users  -> reviews   [label="1 : N  (автор)", arrowhead=normal, arrowtail=none];
+}
