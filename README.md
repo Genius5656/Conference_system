@@ -88,6 +88,16 @@ conference_system/
 **Вариант A — уже установлен PostgreSQL:**
 
 ```bash
+sudo dnf install postgresql
+
+sudo postgresql-setup --initdb
+
+sudo dnf install postgresql-server postgresql-contrib
+sudo -u postgres initdb -D /var/lib/pgsql/data
+
+systemctl list-unit-files | grep postgresql
+sudo systemctl start postgresql-<vv>
+
 sudo -u postgres psql -c "CREATE USER conference WITH PASSWORD 'conference';"
 sudo -u postgres psql -c "CREATE DATABASE conference_system OWNER conference;"
 ```
